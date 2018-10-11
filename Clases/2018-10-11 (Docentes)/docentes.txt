@@ -1,0 +1,8 @@
+· Los docentes cobran sueldos de forma diferente:
+	- Los adjuntos cobran $1000 por cada curso asignado.
+	- Los ordinarios cobran el doble que un adjunto (solo se duplica el valor base, no el plus).
+	- Los ordinarios interinos, además, cobran un extra de $1000 si están en más de un curso.
+	- Los ayudantes:
+		· Rentados cobran $600 si están asignados al menos a un curso.
+		· No rentados no cobran.
+		· Juan, que es un ayudante rentado, cobra $200 más, porque conoce al dueño.
