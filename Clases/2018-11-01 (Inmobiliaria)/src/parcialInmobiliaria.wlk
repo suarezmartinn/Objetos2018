@@ -1,14 +1,19 @@
-//object inmobiliaria {
-//	var property operacionesRealizadas
-//	
-//	method realizarOperacion(operacion) {
-//		operacionesRealizadas.add(operacion)
-//	}
-//	
-//	method cancelarOperacion(operacion) {
-//		operacionesRealizadas.remove(operacion)
-//	}
-//}
+object inmobiliaria {
+	const property operacionesRealizadas = []
+	const property empleados = []
+	
+	method realizarOperacion(operacion) {
+		operacionesRealizadas.add(operacion)
+	}
+	
+	method cancelarOperacion(operacion) {
+		operacionesRealizadas.remove(operacion)
+	}
+	
+	method mejorEmpleadoSegun(unCriterio) {
+		empleados.max(unCriterio)
+	}
+}
 
 class Operacion {
 	var property vendedor
@@ -76,4 +81,16 @@ class Departamento inherits Inmueble {
 
 class Zona {
 	var property plus
+}
+
+class Estado {
+	method reservar(operacion, empleado, cliente) {
+		throw new Exception("No se puede.")
+	}
+}
+
+class Abierta inherits Estado {
+	override method reservar(operacion, _empleado, _cliente) {
+		operacion.estado(new Reservada(empleado = _empleado, cliente = _cliente))
+	}
 }
