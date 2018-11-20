@@ -4,6 +4,10 @@ class Fiesta {
 	const property lugar
 	const property fecha
 	const property invitados
+	
+	method esUnBodrio() = invitados.all{invitado => !invitado.estaConformeConSuDisfraz(self)}
+	
+	method mejorDisfraz() = invitados.max{invitado => invitado.puntuacionDelDisfraz(self)}.disfraz()
 }
 
 class Invitado {
@@ -12,11 +16,14 @@ class Invitado {
 	var property personalidad
 	var property tipo
 	
-	method puntuacionDelDisfraz() = disfraz.puntuacion(self)
+	method puntuacionDelDisfraz(unaFiesta) = disfraz.puntuacion(unaFiesta, self)
 	
 	method esSexy() = personalidad.esSexy(self)
 	
-	method estaConformeConSuDisfraz() = disfraz.puntuacion(self) > 10 && tipo.estaConformeCon(self, disfraz)
+	method estaConformeConSuDisfraz(unaFiesta) = self.puntuacionDelDisfraz(unaFiesta) > 10 && tipo.estaConformeCon(unaFiesta, self, disfraz)
+	
+	// Metodos para caracteristicas de disfraz
+	method esViejo() = edad > 50
 }
 
 // Disfraces y caracteristicas
@@ -25,14 +32,40 @@ class Disfraz {
 	const property fechaConfeccion
 	const property caracteristicas
 	
-	method puntuacion(unaPersona) = caracteristicas.sum{ c => c.puntuacionQueOtorga(unaPersona, self) }
+	method puntuacion(unaFiesta, unaPersona) = caracteristicas.sum{ c => c.puntuacionQueOtorga(unaFiesta, unaPersona, self) }
 	
-	// Metodos usados en tipos de persona
+	// Metodos para tipos de persona
 	method nombrePar() = nombre.length().even()
-	method esNuevo() = (new Date() - fechaConfeccion) > 30 // no se si esto esta bien.
+	method esNuevo() = (new Date() - fechaConfeccion) > 30
 }
 
-
+class Gracioso {
+	const property nivelGracia
+	
+	method puntuacionQueOtorga(unaFiesta, unaPersona, unDisfraz) {
+		if(unaPersona.esViejo()) return nivelGracia * 3
+		return nivelGracia
+	}
+}
+class Tobara {
+	const property fechaCompra
+	
+	method puntuacionQueOtorga(unaFiesta, unaPersona, unDisfraz) {
+		if((unaFiesta.fecha() - fechaCompra) >= 2) return 5
+		return 3
+	}
+}
+class Careta {
+	const property puntuacion
+	
+	method puntuacionQueOtorga(unaFiesta, unaPersona, unDisfraz) = puntuacion
+}
+class Sexy {
+	method puntuacionQueOtorga(unaFiesta, unaPersona, unDisfraz) {
+		if(unaPersona.esSexy()) return 15
+		return 2
+	}
+}
 
 // Personalidades
 object alegre {
@@ -41,21 +74,16 @@ object alegre {
 object taciturna {
 	method esSexy(unaPersona) = unaPersona.edad() < 30
 }
-object cambiante {
-	var property personalidad
-	
-	method esSexy(unaPersona) = personalidad.esSexy(unaPersona)
-}
 
 // Tipos de persona
 object caprichoso {
-	method estaConformeCon(unaPersona, unDisfraz) = unDisfraz.nombrePar()
+	method estaConformeCon(unaFiesta, unaPersona, unDisfraz) = unDisfraz.nombrePar()
 }
 object pretencioso {
-	method estaConformeCon(unaPersona, unDisfraz) = unDisfraz.esNuevo()
+	method estaConformeCon(unaFiesta, unaPersona, unDisfraz) = unDisfraz.esNuevo()
 }
 class Numerologo {
 	var property numeroPreferido
 	
-	method estaConformeCon(unaPersona, unDisfraz) = unDisfraz.puntuacion(unaPersona) == numeroPreferido
+	method estaConformeCon(unaFiesta, unaPersona, unDisfraz) = unDisfraz.puntuacion(unaFiesta, unaPersona) == numeroPreferido
 }

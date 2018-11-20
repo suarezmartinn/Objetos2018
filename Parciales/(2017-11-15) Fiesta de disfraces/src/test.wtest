@@ -1,0 +1,42 @@
+import parcialFiestaDisfraces.*
+
+describe "Tests del parcial fiesta de disfraces" {
+	const macriGato
+	const altamira
+	const kuka
+	const trosko
+	const fiestaMilitante
+	
+	fixture {
+		macriGato = new Disfraz(nombre = "Macri Gato", fechaConfeccion = new Date(), caracteristicas = [new Gracioso(nivelGracia = 9), new Careta(puntuacion = 10)])
+		kuka = new Invitado(edad = 24, disfraz = macriGato, personalidad = taciturna, tipo = caprichoso)
+		altamira = new Disfraz(nombre = "Te pones troskita de noche", fechaConfeccion = new Date(10, 11, 2018), caracteristicas = [new Tobara(fechaCompra = new Date(12, 11, 2018)), new Sexy()])
+		trosko = new Invitado(edad = 52, disfraz = altamira, personalidad = alegre, tipo = new Numerologo(numeroPreferido = 22))
+		fiestaMilitante = new Fiesta(lugar = "Alla", fecha = new Date(), invitados = #{kuka, trosko})
+	}
+	
+	test "El puntaje del disfraz macriGato, si lo usa Kuka, es 19" {
+		assert.equals(19, macriGato.puntuacion(fiestaMilitante, kuka))
+	}
+	test "Kuka es sexy" {
+		assert.that(kuka.esSexy())
+	}
+	test "Kuka esta conforme con su disfraz" {
+		assert.that(kuka.estaConformeConSuDisfraz(fiestaMilitante))
+	}
+	test "El puntaje del disfraz altamira, si lo usa Trosko, es 7" {
+		assert.equals(7, altamira.puntuacion(fiestaMilitante, trosko))
+	}
+	test "Trosko no es sexy" {
+		assert.notThat(trosko.esSexy())
+	}
+	test "Trosko no esta conforme con su disfraz" {
+		assert.notThat(trosko.estaConformeConSuDisfraz(fiestaMilitante))
+	}
+	test "La fiestaMilitante no es un bodrio" {
+		assert.notThat(fiestaMilitante.esUnBodrio())
+	}
+	test "El mejor disfraz de la fiestaMilitante es macriGato" {
+		assert.equals(macriGato, fiestaMilitante.mejorDisfraz())
+	}
+}
