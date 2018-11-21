@@ -8,6 +8,25 @@ class Fiesta {
 	method esUnBodrio() = invitados.all{invitado => !invitado.estaConformeConSuDisfraz(self)}
 	
 	method mejorDisfraz() = invitados.max{invitado => invitado.puntuacionDelDisfraz(self)}.disfraz()
+	
+	method puedenIntercambiarDisfraces(unInvitado, otroInvitado) = self.ambosEstanInvitados(unInvitado, otroInvitado) && self.algunoNoEstaConforme(unInvitado, otroInvitado) && self.cambiandoDisfracesSeConforman(unInvitado, otroInvitado) 
+	method estaInvitado(persona) = invitados.contains(persona)
+	method ambosEstanInvitados(unInvitado, otroInvitado) = self.estaInvitado(unInvitado) && self.estaInvitado(otroInvitado)
+	method algunoNoEstaConforme(unInvitado, otroInvitado) = !unInvitado.estaConformeConSuDisfraz(self) || !otroInvitado.estaConformeConSuDisfraz(self)
+	method cambiandoDisfracesSeConforman(unInvitado, otroInvitado) = unInvitado.meConformoConElDisfrazDe(self, otroInvitado) && otroInvitado.meConformoConElDisfrazDe(self, unInvitado)
+	
+	method invitar(persona) {
+		if(persona.tieneDisfraz() && !self.estaInvitado(persona)) invitados.add(persona)
+		else throw new Exception("No se puede invitar a la persona " + persona.toString())
+	}
+}
+object fiestaInolvidable inherits Fiesta {
+	override method invitar(persona) {
+		if (super(persona) && persona.esSexy() && persona.estaConformeConSuDisfraz(self)) {
+			invitados.add(persona)
+		}
+		else throw new Exception("No se puede invitar a la persona " + persona.toString())
+	}
 }
 
 class Invitado {
@@ -22,8 +41,17 @@ class Invitado {
 	
 	method estaConformeConSuDisfraz(unaFiesta) = self.puntuacionDelDisfraz(unaFiesta) > 10 && tipo.estaConformeCon(unaFiesta, self, disfraz)
 	
-	// Metodos para caracteristicas de disfraz
+	// Metodo para caracteristicas de disfraz.
 	method esViejo() = edad > 50
+	
+	// Metodo para intercambio de disfraces.
+	method meConformoConElDisfrazDe(unaFiesta, otraPersona) {
+		disfraz = otraPersona.disfraz()
+		
+		return self.estaConformeConSuDisfraz(unaFiesta)
+	}
+	
+	method tieneDisfraz() = disfraz != null
 }
 
 // Disfraces y caracteristicas
