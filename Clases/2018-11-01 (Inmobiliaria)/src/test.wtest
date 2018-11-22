@@ -1,0 +1,13 @@
+import miResolucion.*
+
+describe "Tests parcial inmobiliaria" {
+	const casa
+	
+	fixture {
+		casa = new Casa(valor = 20000, ambientes = 1, metrosCuadrados = 70, publicadoPara = "Alquilar", zona = "ELBAJO")
+	}
+	
+	test "El valor de casa es 20000" {
+		assert.equals(20000, casa.valor())
+	}
+}
