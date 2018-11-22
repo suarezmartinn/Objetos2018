@@ -1,0 +1,30 @@
+import parcialIntensamente.*
+
+describe "Tests intensamente" {
+	const evento
+	const recuerdo
+	
+	fixture {
+		riley.emocionDominante(alegria) 
+
+		evento = new Evento(descripcion = "Se muere Macr*.", fecha = new Date(21, 11, 2018))
+		recuerdo = new Recuerdo(descripcion = "Muerte de Merlini.", fecha = new Date(), emocionDominante = riley.emocionDominante())
+	}
+	
+	test "Riley vive el evento y recuerdo queda en los recuerdos del dia." {
+		riley.vivir(evento)
+		assert.notThat(riley.recuerdosDelDia().isEmpty())
+	}
+	
+	test "Asiento recuerdo y este queda en los pensamientos centrales." {
+		recuerdo.asentarsePara(riley)
+		assert.that(riley.pensamientosCentrales().contains(recuerdo))
+	}
+	
+	test "Riley asienta un recuerdo estando triste entonces su felicidad baja 10%." {
+		riley.emocionDominante(tristeza)
+		const unRecuerdo = new Recuerdo(descripcion = "Contagio de VIH por cogerse al globo.", fecha = new Date(25, 11, 2018), emocionDominante = riley.emocionDominante())
+		unRecuerdo.asentarsePara(riley)
+		assert.equals(900, riley.nivelFelicidad())
+	}
+}
